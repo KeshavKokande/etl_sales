@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  sales-airflow:
+    image: mydatapipeline:latest
+
+    volumes:
+      - ./airflow:/opt/airflow                
+      - ../dbt_project:/opt/airflow/dbt_project
+      - ~/.dbt:/home/airflow/.dbt
+
+    env_file:
+      - ./airflow/.env
+
+    ports:
+      - "8080:8080"
+
+    command: airflow standalone

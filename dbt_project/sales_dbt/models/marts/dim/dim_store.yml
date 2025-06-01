@@ -1,0 +1,38 @@
+version: 2
+models:
+- name: dim_store
+  columns:
+  - name: ORDER_ID
+    tests:
+    - not_null
+    - unique
+  - name: ORDER_DATE
+    tests:
+    - not_null
+  - name: CUSTOMER_ID
+    tests:
+    - not_null
+  - name: PRODUCT_ID
+    tests:
+    - not_null
+  - name: STORE_ID
+    tests:
+    - not_null
+  - name: EMPLOYEE_ID
+    tests:
+    - not_null
+  - name: QUANTITY
+    tests:
+    - not_null
+  - name: UNIT_PRICE
+    tests:
+    - not_null
+  - name: DISCOUNT
+    tests:
+    - not_null
+  - name: TOTAL_PRICE
+    tests:
+    - not_null
+  - name: PAYMENT_METHOD
+    tests:
+    - not_null

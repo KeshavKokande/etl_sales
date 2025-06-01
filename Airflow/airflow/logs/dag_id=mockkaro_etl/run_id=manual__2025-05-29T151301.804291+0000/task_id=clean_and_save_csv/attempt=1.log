@@ -1,0 +1,4 @@
+{"timestamp":"2025-05-29T15:13:10.866026","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-05-29T15:13:10.866895","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/etl_mockkaro.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-05-29T15:13:15.829669Z","level":"info","event":"Cleaned data saved to /opt/airflow/cleaned_mockkaro_data.csv","chan":"stdout","logger":"task"}
+{"timestamp":"2025-05-29T15:13:13.282065","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}

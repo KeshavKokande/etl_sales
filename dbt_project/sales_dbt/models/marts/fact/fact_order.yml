@@ -1,0 +1,40 @@
+version: 2
+models:
+- name: fact_order
+  columns:
+  - name: order_id
+    tests:
+    - not_null
+    - unique
+  - name: CUSTOMER_ID_NK
+    tests:
+    - relationships:
+        to: ref('dim_customer')
+        field: customer_id
+  - name: PRODUCT_ID_NK
+    tests:
+    - relationships:
+        to: ref('dim_product')
+        field: PRODUCT_ID_NK
+  - name: EMPLOYEE_ID_NK
+    tests:
+    - relationships:
+        to: ref('dim_employee')
+        field: EMPLOYEE_ID_NK
+  - name: order_date
+    tests: []
+  - name: QUANTITY
+    tests:
+    - not_null
+  - name:  UNIT_PRICE
+    tests:
+    - not_null
+  - name:  DISCOUNT
+    tests:
+    - not_null
+  - name: TOTAL_PRICE
+    tests:
+    - not_null
+  - name:  PAYMENT_METHOD
+    tests:
+    - not_null

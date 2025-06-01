@@ -1,0 +1,11 @@
+version: 2
+models:
+- name: dim_employee
+  columns:
+  - name: EMPLOYEE_ID_NK
+    tests:
+    - not_null
+    - unique
+  - name: ROLE
+    tests:
+    - not_null

@@ -1,0 +1,17 @@
+version: 2
+models:
+- name: fact_tickets
+  columns:
+  - name:  TICKET_ID
+    tests:
+    - not_null
+    - unique
+  - name: TICKET_DATE
+    tests:
+    - not_null
+  - name: CUSTOMER_ID_NK
+    tests:
+    - not_null
+  - name: RESOLUTION_TIME
+    tests: 
+    - not_null

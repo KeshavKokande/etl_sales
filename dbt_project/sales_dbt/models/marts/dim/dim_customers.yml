@@ -1,0 +1,25 @@
+version: 2
+models:
+- name: dim_customers
+  columns:
+  - name: CUSTOMER_ID_NK
+    tests:
+    - not_null
+    - unique
+  - name: first_name
+    tests:
+    - not_null
+  - name: last_name
+    tests:
+    - not_null
+  - name: email
+    tests:
+    - not_null
+  - name: PHONE
+    tests: []
+  - name: REGION
+    tests:
+    - not_null
+  - name: LOYALTY_STATUS
+    tests:
+    - not_null

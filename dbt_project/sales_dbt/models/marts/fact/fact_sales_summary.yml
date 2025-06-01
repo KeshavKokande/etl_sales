@@ -1,0 +1,17 @@
+version: 2
+models:
+- name: fact_sales_summary
+  columns:
+  - name: CUSTOMER_ID_NK
+    tests:
+    - not_null
+    - unique
+  - name: TOTAL_SPENT
+    tests:
+    - not_null
+  - name: TOTAL_ORDERS
+    tests:
+    - not_null
+  - name: LAST_ORDER_DATE
+    tests:
+    - not_null

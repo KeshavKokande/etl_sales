@@ -1,0 +1,25 @@
+version: 2
+models:
+- name: dim_product
+  columns:
+  - name: product_id_nk
+    tests:
+    - not_null
+    - unique
+  - name: product_name
+    tests:
+    - not_null
+  - name: product_category
+    tests: []
+  - name: CATEGORY
+    tests:
+    - not_null
+  - name: SUB_CATEGORY
+    tests:
+    - not_null
+  - name: BRAND
+    tests:
+    - not_null
+  - name: UNIT_COST
+    tests:
+    - not_null

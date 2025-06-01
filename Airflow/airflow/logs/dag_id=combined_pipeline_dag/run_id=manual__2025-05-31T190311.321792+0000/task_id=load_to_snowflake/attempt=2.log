@@ -1,0 +1,5 @@
+{"timestamp":"2025-05-31T19:06:16.395715","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-05-31T19:06:16.397432","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/dbt_orchestration_dag.py","logger":"airflow.models.dagbag.DagBag"}
+{"timestamp":"2025-05-31T19:06:21.023487","level":"info","event":"Snowflake Connector for Python Version: 3.15.0, Python Version: 3.12.10, Platform: Linux-6.6.87.1-microsoft-standard-WSL2-x86_64-with-glibc2.36","logger":"snowflake.connector.connection"}
+{"timestamp":"2025-05-31T19:06:21.024265","level":"info","event":"Connecting to GLOBAL Snowflake domain","logger":"snowflake.connector.connection"}
+{"timestamp":"2025-05-31T19:14:17.641263","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator"}

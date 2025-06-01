@@ -1,0 +1,2 @@
+{"timestamp":"2025-05-31T17:47:57.630506","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager"}
+{"timestamp":"2025-05-31T17:47:57.631798","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/dbt_orchestration_dag.py","logger":"airflow.models.dagbag.DagBag"}
