@@ -19,13 +19,13 @@ A complete end-to-end data engineering project using **Airflow**, **dbt**, **Sno
 * [CI/CD Planning](#ci-cd-planning)
 
 ---
-
+<a name="overview"></a>
 ## 🔍 Overview
 
 This project loads raw e-commerce data (CSV), cleans it, and ingests it into **Snowflake**. It then runs **dbt models** to transform the data into meaningful **DIM** and **FACT** tables. The entire process is orchestrated using **Apache Airflow**, containerized using **Docker**, and tested via **dbt tests**.
 
 ---
-
+<a name="project-architecture"></a>
 ## 🏗️ Project Architecture
 
 ```
