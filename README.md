@@ -17,6 +17,7 @@ A complete end-to-end data engineering project using **Airflow**, **dbt**, **Sno
 * [Incremental Load Logic](#incremental-load-logic)
 * [dbt Testing Overview](#dbt-testing-overview)
 * [CI/CD Planning](#ci-cd-planning)
+* [FAQs](#faq)
 
 ---
 <a name="overview"></a>
@@ -37,7 +38,7 @@ This project loads raw e-commerce data (CSV), cleans it, and ingests it into **S
 ```
 
 ---
-
+<a name="tech-stack"></a>
 ## ⚙️ Tech Stack
 
 * **Apache Airflow**: Workflow orchestration
@@ -47,7 +48,7 @@ This project loads raw e-commerce data (CSV), cleans it, and ingests it into **S
 * **Python**: Data cleaning and transformation
 
 ---
-
+<a name="folder-structure"></a>
 ## 🗂️ Folder Structure
 
 ```bash
@@ -78,7 +79,7 @@ MY_DATA_PIPELINE/
 ```
 
 ---
-
+<a name="setup-instructions"></a>
 ## 🛠️ Setup Instructions
 
 ### 1. Clone the Repository
@@ -111,7 +112,7 @@ docker-compose up --build
 Open Airflow UI: [http://localhost:8080](http://localhost:8080)
 
 ---
-
+<a name="running-the-pipeline"></a>
 ## ▶️ Running the Pipeline
 
 Once Airflow is running, enable the DAG `combined_pipeline_dag`:
@@ -124,7 +125,7 @@ print_welcome → print_date → clean_data → load_to_snowflake
 ```
 
 ---
-
+<a name="airflow-dag-details"></a>
 ## 🧐 Airflow DAG Details
 
 **DAG Name:** `combined_pipeline_dag`
@@ -136,7 +137,7 @@ print_welcome → print_date → clean_data → load_to_snowflake
 * `TaskGroup`: groups dbt run/test together
 
 ---
-
+<a name="dbt-model-structure"></a>
 ## 📊 dbt Model Structure
 
 * `models/staging/`: Extract columns from raw
@@ -152,7 +153,7 @@ print_welcome → print_date → clean_data → load_to_snowflake
 **Schema Configuration:** `dbt_project.yml` handles folder-specific schema overrides.
 
 ---
-
+<a name="incremental-load-logic"></a>
 ## 📈 Incremental Load Logic (Planned)
 
 Although current models use `materialized='table'`, you can enable **incremental materialization** by:
@@ -184,6 +185,7 @@ WHEN MATCHED THEN UPDATE SET ...
 WHEN NOT MATCHED THEN INSERT ...
 ```
 ---
+<a name="dbt-testing-overview"></a>
 ## 🔢 dbt Testing Overview
 
 We are validating dbt models using built-in **dbt tests**:
@@ -203,6 +205,7 @@ Test results are visible in Airflow UI > Logs after `dbt_test_marts` step.
 
 <!--
 ---
+<a name="ci-cd-planning"></a>
 ## 🚀 CI/CD Planning (Optional Setup)
 
 **To integrate GitHub Actions later:**
@@ -224,7 +227,7 @@ jobs:
 ```
 -->
 ---
-
+<a name="faq"></a>
 ## 🤝 FAQs
 
 * **Q:** Can I run dbt models outside Airflow?
