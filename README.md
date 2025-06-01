@@ -1,10 +1,10 @@
 # 🚀 MY\_DATA\_PIPELINE
 
-A complete end-to-end data engineering project using **Airflow**, **dbt**, **Snowflake**, and **Docker**. This repository automates the ingestion, transformation, and testing of cleaned e-commerce order data.
+A complete end-to-end data engineering project using **Airflow**, **dbt**, **Snowflake**, and **Docker**. This repository automates the ingestion, transformation, testing, and validation of cleaned e-commerce order data.
 
 ---
 
-## 🧾 Table of Contents
+## 📜 Table of Contents
 
 * [Overview](#overview)
 * [Project Architecture](#project-architecture)
@@ -15,13 +15,14 @@ A complete end-to-end data engineering project using **Airflow**, **dbt**, **Sno
 * [Airflow DAG Details](#airflow-dag-details)
 * [dbt Model Structure](#dbt-model-structure)
 * [Incremental Load Logic](#incremental-load-logic)
+* [dbt Testing Overview](#dbt-testing-overview)
 * [CI/CD Planning](#ci-cd-planning)
 
 ---
 
 ## 🔍 Overview
 
-This project loads raw e-commerce data (CSV), cleans it, and ingests it into **Snowflake**. It then runs **dbt models** to transform the data into meaningful **DIM** and **FACT** tables. The entire process is orchestrated using **Apache Airflow**, containerized using **Docker**.
+This project loads raw e-commerce data (CSV), cleans it, and ingests it into **Snowflake**. It then runs **dbt models** to transform the data into meaningful **DIM** and **FACT** tables. The entire process is orchestrated using **Apache Airflow**, containerized using **Docker**, and tested via **dbt tests**.
 
 ---
 
@@ -40,7 +41,7 @@ This project loads raw e-commerce data (CSV), cleans it, and ingests it into **S
 ## ⚙️ Tech Stack
 
 * **Apache Airflow**: Workflow orchestration
-* **dbt (Data Build Tool)**: Data transformation
+* **dbt (Data Build Tool)**: Data transformation and testing
 * **Snowflake**: Cloud data warehouse
 * **Docker**: Containerization and environment setup
 * **Python**: Data cleaning and transformation
@@ -51,23 +52,29 @@ This project loads raw e-commerce data (CSV), cleans it, and ingests it into **S
 
 ```bash
 MY_DATA_PIPELINE/
-|├── Airflow/
-|   |
-|   ├── dags/               # Airflow DAGs
-|   ├── airflow.cfg         # Airflow config
-|   ├── .env                # Snowflake credentials
-|   ├── docker-compose.yml   # Compose file to run Airflow + dbt
-|   ├── dockerfile          # Dockerfile for Airflow image
-|
+│
+├── Airflow/
+│   ├── dags/
+│   │   ├── dbt_orchestration_dag.py
+│   ├── tasks/ (modular Python tasks)
+│   │   ├── clean_load_tasks.py, quote_tasks.py, welcome_tasks.py
+│   ├── docker-compose.yml
+│   ├── dockerfile
+│   ├── airflow.cfg, .env, airflow.db
+│   ├── MOCK_DATA.csv, cleaned_sales_data.csv
+│
 ├── dbt_project/
-|   ├── mockkaro_dbt/
-|       ├── models/         # dbt models (staging, marts)
-|       ├── snapshots/      # dbt snapshots (optional)
-|       ├── seeds/          # Seed data if needed
-|       ├── tests/          # Custom tests
-|       ├── dbt_project.yml  # dbt config file
-|
-└── MOCK_DATA.csv           # Input dataset
+│   ├── sales_dbt/
+│   │   ├── models/
+│   │   │   ├── staging/
+│   │   │   │   ├── stg_orders.sql, stg_customers.sql, ...
+│   │   │   ├── marts/
+│   │   │   │   ├── dim/ (dim_customers.sql, dim_employee.sql, ...)
+│   │   │   │   ├── fact/ (fact_orders.sql, fact_sales_summary.sql, ...)
+│   │   ├── macros/, snapshots/, seeds/, tests/
+│   │   ├── dbt_project.yml, packages.yml
+│
+├── requirements.txt, .gitignore, README.md
 ```
 
 ---
@@ -118,7 +125,7 @@ print_welcome → print_date → clean_data → load_to_snowflake
 
 ---
 
-## 🧠 Airflow DAG Details
+## 🧐 Airflow DAG Details
 
 **DAG Name:** `combined_pipeline_dag`
 
@@ -132,32 +139,70 @@ print_welcome → print_date → clean_data → load_to_snowflake
 
 ## 📊 dbt Model Structure
 
-* `staging/`: Extract columns from raw
+* `models/staging/`: Extract columns from raw
 
-  * `stg_orders.sql`, `stg_customers.sql` etc.
-* `marts/dim/`: Cleaned dimension tables
+  * `stg_orders.sql`, `stg_customers.sql`, `stg_products.sql`, ...
+* `models/marts/dim/`: Cleaned dimension tables
 
-  * `dim_product.sql`, `dim_store.sql` etc.
-* `marts/fact/`: Aggregated fact tables
+  * `dim_product.sql`, `dim_store.sql`, `dim_employee.sql`, ...
+* `models/marts/fact/`: Aggregated fact tables
 
-  * `fact_orders.sql`, `fact_sales_summary.sql`
+  * `fact_orders.sql`, `fact_sales_summary.sql`, `fact_tickets.sql`
 
 **Schema Configuration:** `dbt_project.yml` handles folder-specific schema overrides.
 
 ---
 
-## 📈 Incremental Load Logic (Planned or In Use)
+## 📈 Incremental Load Logic (Planned)
 
-* For staging tables: `materialized='incremental'`
-* Add `unique_key` in `config` block
-* Add logic like:
+Although current models use `materialized='table'`, you can enable **incremental materialization** by:
 
 ```sql
-WHERE {{ this._is_incremental() }} AND updated_at > (SELECT MAX(updated_at) FROM {{ this }})
+{{
+  config(
+    materialized='incremental',
+    unique_key='order_id'
+  )
+}}
+```
+
+And wrap logic using:
+
+```sql
+{% if is_incremental() %}
+  -- WHERE clause to fetch only new/changed rows
+{% endif %}
 ```
 
 ---
+## 📈 Incremental Load Logic (In Use)
+* Merge logic for Snowflake is handled using:
 
+```python
+MERGE INTO target_table USING staging_table ON <condition>
+WHEN MATCHED THEN UPDATE SET ...
+WHEN NOT MATCHED THEN INSERT ...
+```
+---
+## 🔢 dbt Testing Overview
+
+We are validating dbt models using built-in **dbt tests**:
+
+* **Schema Tests** (in `.yml`):
+
+  * `not_null`, `unique`, `relationships`
+* **Custom Tests:** planned in `tests/`
+
+To run all tests:
+
+```bash
+dbt test --select marts
+```
+
+Test results are visible in Airflow UI > Logs after `dbt_test_marts` step.
+
+<!--
+---
 ## 🚀 CI/CD Planning (Optional Setup)
 
 **To integrate GitHub Actions later:**
@@ -177,16 +222,16 @@ jobs:
       - uses: actions/checkout@v3
       - run: docker-compose -f Airflow/docker-compose.yml up --build
 ```
-
+-->
 ---
 
-## 🙋 FAQs
+## 🤝 FAQs
 
 * **Q:** Can I run dbt models outside Airflow?
   **A:** Yes, run them manually using:
 
   ```bash
-  cd dbt_project/mockkaro_dbt
+  cd dbt_project/sales_dbt
   dbt run --select marts
   ```
 
@@ -194,11 +239,11 @@ jobs:
   **A:** Inside Airflow UI > DAG Runs > Task Logs
 
 * **Q:** What if cleaned data loads duplicate rows?
-  **A:** Add deduplication logic or switch to incremental loading strategy.
+  **A:** Deduplication is handled via Snowflake `MERGE` command with `ORDER_ID` as key.
 
 ---
 
-## 🤝 Contributions
+## 👍 Contributions
 
 Feel free to raise issues, PRs, or suggest improvements.
 
