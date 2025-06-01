@@ -1,4 +1,4 @@
-# 🚀 MY\_DATA\_PIPELINE
+# 🚀 ETL\_Pipeline\_Sales
 
 A complete end-to-end data engineering project using **Airflow**, **dbt**, **Snowflake**, and **Docker**. This repository automates the ingestion, transformation, testing, and validation of cleaned e-commerce order data.
 
